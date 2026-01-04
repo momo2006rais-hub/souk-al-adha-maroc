@@ -182,7 +182,6 @@ function mapProduct(row) {
 // -------- public API
 app.get("/api/meta", (req, res) => res.json({ whatsappNumber: WHATSAPP_NUMBER }));
 
-// approved + active only
 app.get("/api/products", (req, res) => {
   const { category, city, q } = req.query;
 
@@ -393,6 +392,24 @@ app.get("/api/farmers/products", requireFarmer, (req, res) => {
   res.json(rows);
 });
 
+// ✅ DELETE: farmer removes his product (soft delete)
+app.delete("/api/farmers/products/:slug", requireFarmer, (req, res) => {
+  const slug = sanitizeText(req.params.slug, 120);
+
+  const row = db.prepare(`
+    SELECT slug, farmer_id, source
+    FROM products
+    WHERE slug=? AND is_active=1
+  `).get(slug);
+
+  if (!row) return res.status(404).json({ error: "Not found" });
+  if (row.source !== "farmer") return res.status(403).json({ error: "Forbidden" });
+  if (row.farmer_id !== req.farmer.id) return res.status(403).json({ error: "Forbidden" });
+
+  db.prepare(`UPDATE products SET is_active=0, status='deleted' WHERE slug=?`).run(slug);
+  res.json({ ok: true });
+});
+
 // -------- admin API
 app.get("/api/admin/orders", requireAdmin, (req, res) => {
   const rows = db.prepare("SELECT * FROM orders ORDER BY created_at DESC LIMIT 200").all();
@@ -428,7 +445,7 @@ app.get("/api/admin/pending-products", requireAdmin, (req, res) => {
 });
 
 app.post("/api/admin/products/:slug/approve", requireAdmin, (req, res) => {
-  const slug = req.params.slug;
+  const slug = sanitizeText(req.params.slug, 120);
   const row = db.prepare("SELECT slug FROM products WHERE slug=? AND source='farmer'").get(slug);
   if (!row) return res.status(404).json({ error: "Not found" });
 
@@ -437,11 +454,21 @@ app.post("/api/admin/products/:slug/approve", requireAdmin, (req, res) => {
 });
 
 app.post("/api/admin/products/:slug/reject", requireAdmin, (req, res) => {
-  const slug = req.params.slug;
+  const slug = sanitizeText(req.params.slug, 120);
   const row = db.prepare("SELECT slug FROM products WHERE slug=? AND source='farmer'").get(slug);
   if (!row) return res.status(404).json({ error: "Not found" });
 
   db.prepare("UPDATE products SET status='rejected', is_active=0 WHERE slug=?").run(slug);
+  res.json({ ok: true });
+});
+
+// ✅ Admin deactivate ANY product (approved or seed)
+app.post("/api/admin/products/:slug/deactivate", requireAdmin, (req, res) => {
+  const slug = sanitizeText(req.params.slug, 120);
+  const row = db.prepare("SELECT slug FROM products WHERE slug=? AND is_active=1").get(slug);
+  if (!row) return res.status(404).json({ error: "Not found" });
+
+  db.prepare("UPDATE products SET is_active=0, status='deactivated' WHERE slug=?").run(slug);
   res.json({ ok: true });
 });
 

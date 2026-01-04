@@ -23,7 +23,9 @@ function setToken(t){ localStorage.setItem(TOKEN_KEY, t); }
 function clearToken(){ localStorage.removeItem(TOKEN_KEY); }
 
 async function api(url, opts = {}) {
-  const headers = { "content-type": "application/json", ...(opts.headers || {}) };
+  const headers = { ...(opts.headers || {}) };
+  if (opts.body) headers["content-type"] = "application/json";
+
   const token = getToken();
   if (token) headers.authorization = `Bearer ${token}`;
 
@@ -47,6 +49,10 @@ function card(p){
           <span class="badge">Status: ${p.status}</span>
           <span class="badge">Prix: ${p.price_mad} MAD</span>
         </div>
+        <div class="actions">
+          <a class="btn secondary" href="/product.html?slug=${encodeURIComponent(p.slug)}" target="_blank">👁️ Voir</a>
+          <button class="btn secondary" data-del="${p.slug}" type="button">🗑️ Supprimer</button>
+        </div>
       </div>
     </article>
   `;
@@ -60,6 +66,23 @@ async function refreshMe(){
 async function refreshMyProducts(){
   const list = await api("/api/farmers/products");
   myProducts.innerHTML = list.length ? list.map(card).join("") : `<p class="muted">Aucun produit.</p>`;
+
+  myProducts.querySelectorAll("[data-del]").forEach(btn => {
+    btn.addEventListener("click", async () => {
+      const slug = btn.getAttribute("data-del");
+      if(!confirm("Supprimer ce produit ?")) return;
+
+      btn.disabled = true;
+      try{
+        await api(`/api/farmers/products/${encodeURIComponent(slug)}`, { method: "DELETE" });
+        toast("🗑️ Supprimé");
+        await refreshMyProducts();
+      }catch(e){
+        toast("❌ " + e.message);
+        btn.disabled = false;
+      }
+    });
+  });
 }
 
 function showPanel(){
