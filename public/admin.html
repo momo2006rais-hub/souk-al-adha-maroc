@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Admin — Souk Al-Adha Maroc</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="/">
+        <img src="/assets/logo.svg" alt="Souk Al-Adha Maroc">
+      </a>
+      <div class="nav">
+        <a class="btn secondary" href="/">← Home</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="container" style="padding:22px 0 40px">
+    <div class="hero-side">
+      <h2 style="margin:0 0 12px">🔒 Admin — Dashboard</h2>
+
+      <div class="form">
+        <div class="field">
+          <label>Mot de passe admin</label>
+          <input id="pw" type="password" placeholder="••••••••">
+        </div>
+
+        <div style="display:flex;gap:10px;flex-wrap:wrap">
+          <button class="btn" id="loadOrders" type="button">Charger les commandes</button>
+          <button class="btn secondary" id="loadPending" type="button">Produits en attente</button>
+        </div>
+      </div>
+
+      <div class="line"></div>
+
+      <div class="section-title">
+        <h2 style="margin:0">📦 Commandes</h2>
+        <div class="hint muted">Dernières 200</div>
+      </div>
+      <div id="orders"></div>
+
+      <div class="line"></div>
+
+      <div class="section-title">
+        <h2 style="margin:0">🕒 Produits en attente</h2>
+        <div class="hint muted">Approve / Reject</div>
+      </div>
+      <div id="pending"></div>
+
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <script type="module" src="/js/admin.js"></script>
+</body>
+</html>

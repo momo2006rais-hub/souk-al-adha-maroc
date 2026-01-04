@@ -1,0 +1,128 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Espace Éleveur — Souk Al-Adha Maroc</title>
+  <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="container topbar-inner">
+      <a class="brand" href="/">
+        <img src="/assets/logo.svg" alt="Souk Al-Adha Maroc">
+      </a>
+      <div class="nav">
+        <a class="btn secondary" href="/">← Home</a>
+      </div>
+    </div>
+  </div>
+
+  <main class="container" style="padding:22px 0 40px">
+    <div class="hero-side">
+      <h2 style="margin:0 0 10px">🐑 Espace Éleveur</h2>
+      <p class="muted" style="margin:0 0 14px;line-height:1.6">
+        Publie tes produits (animaux + aliments + accessoires + services). Les annonces restent <b>en attente</b> jusqu’à validation admin.
+      </p>
+
+      <div id="authBlock" class="grid" style="grid-template-columns:1fr 1fr;gap:14px">
+        <div class="card">
+          <div class="body">
+            <p class="title">Créer un compte</p>
+            <form id="registerForm" class="form">
+              <div class="field"><label>Nom / Ferme</label><input name="name" required></div>
+              <div class="field"><label>Téléphone (WhatsApp)</label><input name="phone" required placeholder="+2126…"></div>
+              <div class="field"><label>Ville</label><input name="city" required placeholder="Marrakech"></div>
+              <div class="field"><label>Mot de passe</label><input name="password" type="password" required minlength="6"></div>
+              <button class="btn" type="submit">Créer</button>
+            </form>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="body">
+            <p class="title">Se connecter</p>
+            <form id="loginForm" class="form">
+              <div class="field"><label>Téléphone</label><input name="phone" required></div>
+              <div class="field"><label>Mot de passe</label><input name="password" type="password" required></div>
+              <button class="btn" type="submit">Connexion</button>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <div id="panel" style="display:none">
+        <div class="line"></div>
+        <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;align-items:center">
+          <div>
+            <div class="muted">Connecté en tant que</div>
+            <div style="font-weight:900" id="who"></div>
+          </div>
+          <button class="btn secondary" id="logout" type="button">Déconnexion</button>
+        </div>
+
+        <div class="line"></div>
+
+        <div class="card">
+          <div class="body">
+            <p class="title">Ajouter un produit</p>
+            <form id="productForm" class="form">
+              <div class="field"><label>Titre FR</label><input name="title_fr" required placeholder="Ex: Mouton Sardi 55kg (Aid)"></div>
+              <div class="field"><label>Titre AR</label><input name="title_ar" required placeholder="مثال: خروف السردي 55كلغ"></div>
+
+              <div class="grid" style="grid-template-columns:1fr 1fr 1fr;gap:10px">
+                <div class="field">
+                  <label>Catégorie</label>
+                  <select name="category" required>
+                    <option value="aid">🐑 Aid Al-Adha</option>
+                    <option value="moutons">🐏 Moutons</option>
+                    <option value="bovins">🐄 Bovins</option>
+                    <option value="volaille">🐔 Volaille</option>
+                    <option value="caprins">🐐 Caprins</option>
+                    <option value="aliments">🌾 Aliments / Mangime</option>
+                    <option value="accessoires">🧰 Accessoires</option>
+                    <option value="services">🚚 Services</option>
+                  </select>
+                </div>
+                <div class="field"><label>Ville</label><input name="city" placeholder="Marrakech"></div>
+                <div class="field"><label>Prix (MAD)</label><input name="price_mad" required type="number" min="10"></div>
+              </div>
+
+              <div class="grid" style="grid-template-columns:1fr 1fr 1fr;gap:10px">
+                <div class="field"><label>Poids (kg) (optionnel)</label><input name="weight_kg" type="number" step="0.1"></div>
+                <div class="field"><label>Âge (mois) (optionnel)</label><input name="age_months" type="number"></div>
+                <div class="field">
+                  <label>Livraison</label>
+                  <select name="delivery">
+                    <option value="yes">Oui</option>
+                    <option value="no">Non</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field"><label>Image URL #1 (https://...)</label><input name="img1" required></div>
+              <div class="field"><label>Image URL #2 (optionnel)</label><input name="img2"></div>
+
+              <div class="field"><label>Description FR</label><textarea name="description_fr" required placeholder="Détails: race, quantité, livraison, zone, conditions…"></textarea></div>
+              <div class="field"><label>Description AR</label><textarea name="description_ar" required placeholder="التفاصيل: النوع، الكمية، التوصيل، المنطقة…"></textarea></div>
+
+              <button class="btn" type="submit">Envoyer (en attente)</button>
+              <p class="muted" style="margin:8px 0 0">Consiglio: foto reali, chiare, link https diretti.</p>
+            </form>
+          </div>
+        </div>
+
+        <div class="line"></div>
+        <div class="section-title">
+          <h2 style="margin:0">Mes produits</h2>
+          <div class="hint muted">pending → approved → visible</div>
+        </div>
+        <div id="myProducts" class="grid"></div>
+      </div>
+    </div>
+  </main>
+
+  <div id="toast" class="toast"></div>
+  <script type="module" src="/js/seller.js"></script>
+</body>
+</html>
