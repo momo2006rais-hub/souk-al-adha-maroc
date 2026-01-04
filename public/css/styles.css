@@ -134,3 +134,39 @@ img{max-width:100%;display:block}
   .grid{grid-template-columns:1fr}
   .pill input{min-width:140px}
 }
+/* ===== Mobile / Responsive Upgrade ===== */
+@media (max-width: 860px) {
+  .container { padding-left: 14px; padding-right: 14px; }
+
+  .topbar-inner { flex-wrap: wrap; gap: 10px; }
+  .nav { flex-wrap: wrap; gap: 10px; width: 100%; align-items: stretch; }
+
+  .pill { width: 100%; justify-content: space-between; }
+  .pill input, .pill select { width: 100%; font-size: 16px; }
+
+  .btn { padding: 12px 14px; font-size: 16px; border-radius: 12px; }
+  .btn.secondary { padding: 12px 14px; }
+
+  .hero-grid { grid-template-columns: 1fr !important; }
+  .hero-card h1 { font-size: 26px; line-height: 1.15; }
+  .hero-card p { font-size: 16px; line-height: 1.6; }
+
+  .grid { grid-template-columns: 1fr !important; gap: 14px; }
+  .card .title { font-size: 18px; }
+  .muted { font-size: 14px; }
+
+  .drawer { width: 100% !important; max-width: 100% !important; }
+  .drawer.open { transform: translateX(0); }
+  .drawer-body { padding: 14px; }
+  .cart-item { grid-template-columns: 70px 1fr; gap: 10px; }
+  .cart-item img { width: 70px; height: 70px; border-radius: 12px; }
+
+  .form input, .form select, .form textarea { font-size: 16px; padding: 12px; }
+  textarea { min-height: 110px; }
+}
+
+@media (max-width: 420px) {
+  .hero-card h1 { font-size: 24px; }
+  .btn { width: 100%; justify-content: center; }
+  .actions { display: grid; grid-template-columns: 1fr; gap: 10px; }
+}
